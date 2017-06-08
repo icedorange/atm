@@ -27,4 +27,10 @@ public interface Constant {
 	
 	//金额不足
 	int RUNOUT = 4001;
+	
+	//超出每天能去的最大金额
+	int MAXOUT = 4002;
+	
+	//超出每天能存的最大金额
+	int MAXINPUT = 4003;
 }

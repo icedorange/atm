@@ -5,9 +5,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>存款</title>
 </head>
 <body>
 
+	<form action="cunkuan_action.jsp">
+		<table>
+			<tr>
+				<td>请输入存款金额：</td>
+				<td><input id="change" name="change" type="text"></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="确认"></td>
+			</tr>
+		</table>
+	</form>
+	
 </body>
 </html>

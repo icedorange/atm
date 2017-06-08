@@ -23,6 +23,7 @@
 		msg = "登陆成功";
 		int cardId = cardService.selectCardIdByCardNum(cardNum);
 		session.setAttribute("cardId", cardId);
+		session.setAttribute("cardNum", cardNum);
 		out.write("<SCRIPT LANGUAGE=\"JavaScript\">alert(\"" + msg
 				+ "\");location.href=\"main.jsp\"</SCRIPT>");
 		

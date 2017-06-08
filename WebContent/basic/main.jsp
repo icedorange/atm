@@ -1,5 +1,3 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,7 +8,9 @@
 <body>
 
 
-
+<h3>
+欢迎<%=session.getAttribute("cardNum") %>使用ATM取款机
+</h3>
 <a href="query.jsp">查询余额</a>
 <br/>
 <a href="qukuan.jsp">取款</a>

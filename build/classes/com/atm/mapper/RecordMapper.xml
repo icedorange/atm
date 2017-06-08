@@ -8,14 +8,17 @@
 	<select id="getTranfer" resultType="Record">
 		select * from a_record
 		<where>
-			<if test="operId != null">
+			<if test="operId != 0">
 				and oper_id = #{operId}
 			</if>
-			<if test="aimId != null">
+			<if test="aimId != 0">
 				and aim_id = #{aimId}
 			</if>
-			<if test="operType != null ">
+			<if test="operType != 0 ">
 				and oper_type = #{operType}
+			</if>
+			<if test="time != 0">
+				and date(date)>= date_sub(curdate(),interval #{time} day)
 			</if>
 		</where>
 	</select>

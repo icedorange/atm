@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-	<properties resource="com/atm/config.properties" />
+	<properties resource="/config.properties" />
 
 	<typeAliases>
 		<typeAlias alias="Card" type="com.atm.javabean.Card" />

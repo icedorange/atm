@@ -26,7 +26,7 @@ public class SessionUtil {
 		// 从 XML 中构建 SqlSessionFactory
 		InputStream inputStream;
 		try {
-			String resource = "com/atm/mybatis-config.xml";
+			String resource = "/mybatis-config.xml";
 			inputStream = Resources.getResourceAsStream(resource);
 			sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 			// 从 SqlSessionFactory 中获取 SqlSession
