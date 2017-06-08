@@ -21,14 +21,16 @@ public class CardService {
 	 * 根据cardNum，查询ID
 	 * 
 	 * @param cardNum
-	 * @return
+	 * @return cardId
 	 */
 	public int selectCardIdByCardNum(String cardNum) {
-		if (cardNum.length() != 16) { // ？判断内容是数字，后者是输入内容不能有空格、字符串。。
+		// 判断输入长度是否正确
+		if (cardNum.length() != 16) { 
 			return Constant.FORMAT_ERROR;
 		}
-		CardMapper mapper = se.getMapper(CardMapper.class); // ？作为全局变量会不会有线程安全问题
-		Card card = mapper.selectCardIdByCardNum(cardNum); // ?返回类型是int的话，如果数据库查不到回返回null，出现错误
+		
+		CardMapper mapper = se.getMapper(CardMapper.class); 
+		Card card = mapper.selectCardIdByCardNum(cardNum); 
 		if (card == null) {
 			return Constant.CARD_ERROR;
 		}
@@ -36,12 +38,14 @@ public class CardService {
 	}
 
 	/**
-	 * 根据ID，账号的所有信息
+	 * 根据ID，获取账号的所有信息
 	 * 
 	 * @param cardId
 	 * @return
 	 */
 	public Card selectCardByCardId(int cardId) {
+		//cardId是用selectCardIdByCardNum(String cardNum)方法查询数据库得到
+		//所以默认cardId不会出错
 		CardMapper mapper = se.getMapper(CardMapper.class);
 		Card card = mapper.selectCardByCardId(cardId);
 		return card;
@@ -54,17 +58,21 @@ public class CardService {
 	 * @return
 	 */
 	public int check(String cardNum,String password){
-		if (cardNum.length() != 16) { // ？判断内容是数字，后者是输入内容不能有空格、字符串。。
+		
+		//判断输入的数据长度是否正确
+		if (cardNum.length() != 16 || password.length()!=6) { 
 			return Constant.FORMAT_ERROR;
 		}
-		if(password.length()!=6){
-			return Constant.FORMAT_ERROR;
-		}
-		CardMapper mapper = se.getMapper(CardMapper.class); // ？作为全局变量会不会有线程安全问题
-		Card card = mapper.selectCardIdByCardNum(cardNum); // ?返回类型是int的话，如果数据库查不到回返回null，出现错误
+		
+		CardMapper mapper = se.getMapper(CardMapper.class);
+		
+		//判断卡号是否存在
+		Card card = mapper.selectCardIdByCardNum(cardNum); 
 		if (card == null) {
 			return Constant.CARD_ERROR;
 		}
+		
+		//验证密码是否正确
 		String pass = card.getPassword();
 		if(pass.equals(MD5Util.MD5(password+"atm"))){
 			return Constant.SUCCESS;
@@ -79,14 +87,17 @@ public class CardService {
 	 * @return
 	 */
 	public int checkPassword(int cardId, String password){
+		
 		if(password.length()!=6){
 			return Constant.FORMAT_ERROR;
 		}
+		
 		Card card = selectCardByCardId(cardId);
 		String pass = card.getPassword();
 		if(pass.equalsIgnoreCase(MD5Util.MD5(password+"atm"))){
 			return Constant.SUCCESS;
 		}
+		
 		return Constant.PASSWORD_ERROR;
 	}
 
@@ -110,26 +121,34 @@ public class CardService {
 	 * @return
 	 */
 	public int getMoneyFromCard(int cardId, int money) {
+		//判断输入是否正确
 		if (money <= 0) {
-			return Constant.FAIL;
+			return Constant.FORMAT_ERROR;
 		}
+		
 		money = money * 100;
 		int change = 0;
 		CardMapper mapper = se.getMapper(CardMapper.class);
+		//使用乐观锁
 		while (true) {
 			Card card = selectCardByCardId(cardId);
 			change = card.getMoney();
 			if (change < money) {
+				//余额不足，结束
 				return Constant.RUNOUT;
 			}
+			
+			//version：乐观锁
 			int version = card.getVersion();
 			int temp = mapper.getMoneyFromCard(cardId, version, money);
 			if (temp > 0) {
 				break;
 			}
 		}
-		RecordMapper reMapper = se.getMapper(RecordMapper.class);
-		reMapper.insertTrans(cardId, cardId, 1, money);
+		
+		//插入流水
+		RecordMapper recordMapper = se.getMapper(RecordMapper.class);
+		recordMapper.insertTrans(cardId, cardId, 1, money);
 		
 		return Constant.SUCCESS;
 	}
@@ -142,9 +161,11 @@ public class CardService {
 	 * @return
 	 */
 	public int putMoneyInCard(int cardId, int money) {
+		
 		if (money <= 0) {
-			return Constant.FAIL;
+			return Constant.FORMAT_ERROR;
 		}
+		
 		money = money * 100;
 		CardMapper mapper = se.getMapper(CardMapper.class);
 		while (true) {
@@ -155,6 +176,7 @@ public class CardService {
 				break;
 			}
 		}
+		
 		RecordMapper reMapper = se.getMapper(RecordMapper.class);
 		reMapper.insertTrans(cardId, cardId, 2, money);
 		return Constant.SUCCESS;
@@ -168,9 +190,11 @@ public class CardService {
 	 * @return
 	 */
 	public int transferCheck(int cardId,String aimNum,int money){
+		
 		if (money <= 0) {
-			return Constant.FAIL;
+			return Constant.FORMAT_ERROR;
 		}
+		
 		int aimId = selectCardIdByCardNum(aimNum);
 		if (aimId == Constant.FORMAT_ERROR) { 
 			return Constant.FORMAT_ERROR;
@@ -178,14 +202,23 @@ public class CardService {
 		if (aimId == Constant.CARD_ERROR) {
 			return Constant.CARD_ERROR;
 		}
-		int temp = transfer(cardId,aimId,money);
-		return temp;
+		
+		int result = transfer(cardId,aimId,money);
+		return result;
 	}
 	
-	public int transfer(int cardId,int aimId,int money){
+	/**
+	 * 转账操作
+	 * @param cardId
+	 * @param aimId
+	 * @param money
+	 * @return
+	 */
+	private int transfer(int cardId,int aimId,int money){
 		money = money * 100;
 		int change = 0;
 		CardMapper mapper = se.getMapper(CardMapper.class);
+		
 		while (true) {
 			Card card = selectCardByCardId(cardId);
 			change = card.getMoney();
@@ -198,6 +231,8 @@ public class CardService {
 				break;
 			}
 		}
+		
+		
 		while (true) {
 			Card card = selectCardByCardId(aimId);
 			int version = card.getVersion();
@@ -206,6 +241,7 @@ public class CardService {
 				break;
 			}
 		}
+		
 		RecordMapper reMapper = se.getMapper(RecordMapper.class);
 		reMapper.insertTrans(cardId, aimId, 3, money);
 		return Constant.SUCCESS;
