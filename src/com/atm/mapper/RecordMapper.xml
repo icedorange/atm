@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atm.mapper.RecordMapper">
+
+	<!-- 动态查询， -->
+	<select id="getTranfer" resultType="Record">
+		select * from a_record
+		<where>
+			<if test="operId != null">
+				and oper_id = #{operId}
+			</if>
+			<if test="aimId != null">
+				and aim_id = #{aimId}
+			</if>
+			<if test="operType != null ">
+				and oper_type = #{operType}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertTrans">
+		insert into a_record 
+		(oper_id,aim_id,oper_type,money) values
+		(#{operId},#{aimId},#{operType},#{money})
+	</insert>
+	
+</mapper>
