@@ -7,7 +7,7 @@
 <title>login</title>
 </head>
 <body>
-	<form action="LoginServlet" method="get">
+	<form action="LoginServlet" method="post">
 		<table>
 			<tr>
 				<td>卡号：</td>

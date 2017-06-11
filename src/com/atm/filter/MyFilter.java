@@ -40,8 +40,6 @@ public class MyFilter implements Filter {
 		HttpSession session = req.getSession();
 		String url = req.getServletPath();
 		//判断session是否有效
-		System.out.println(url);
-		System.out.println("doFilter...");
 		if(url.equals("/QueryServlet") 
 				|| url.equals("/QukuanServlet")
 				|| url.equals("/CunkuanServlet")
