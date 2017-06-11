@@ -5,23 +5,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>转账</title>
+<title>存款</title>
 </head>
 <body>
 
-	<form action="transfer_action.jsp">
+	<form action="<%=request.getContextPath()%>/CunkuanServlet?method=cunkuan">
 		<table>
-			<tr>
-				<td>请输入对方账户</td>
-				<td><input id="aimNum" name="aimNum" type="text"></td>
 			<tr>
 				<td>请输入存款金额：</td>
 				<td><input id="change" name="change" type="text"></td>
+				<td>
+					<%
+						Object msg = session.getAttribute("msg");
+						if (msg != null) {
+							out.print("<span style = \"color:red\">");
+							out.print(String.valueOf(msg));
+							out.print("</span>");
+						}
+					%>
+				</td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="确认"></td>
 			</tr>
 		</table>
 	</form>
+	
 </body>
 </html>

@@ -82,6 +82,24 @@ public class CardService {
 	}
 
 	/**
+	 * 检查密码是否正确
+	 * @param cardId
+	 * @param password
+	 * @return
+	 */
+	public int checkPassword(int cardId, String password){
+		if(password.length()!=6){
+			return Constant.FORMAT_ERROR;
+		}
+		Card card = selectCardByCardId(cardId);
+		String pass = card.getPassword();
+		if(pass.equalsIgnoreCase(MD5Util.MD5(password+"atm"))){
+			return Constant.SUCCESS;
+		}
+		return Constant.PASSWORD_ERROR;
+	}
+	
+	/**
 	 * 根据ID，查询余额
 	 * 
 	 * @param cardId
