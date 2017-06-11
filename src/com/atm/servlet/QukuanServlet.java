@@ -43,7 +43,7 @@ public class QukuanServlet extends HttpServlet {
 		}
 		if (method.equals("toQukuan")) {
 			HttpSession session = request.getSession(true);
-			String money = request.getParameter("money");
+			String money = request.getParameter("change");
 			if (money == null) {
 				session.setAttribute("msg", "输入不正确");
 				request.getRequestDispatcher("/WEB-INF/basic/qukuan.jsp").forward(request, response);

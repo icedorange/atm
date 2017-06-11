@@ -40,9 +40,9 @@ public class TransferServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/basic/transfer.jsp").forward(request, response);
 			return;
 		}
-		if (method.equals("transfer")) {
-			String cardNum = request.getParameter("cardNum");
-			String money = request.getParameter("money");
+		if (method.equals("toTransfer")) {
+			String cardNum = request.getParameter("aimNum");
+			String money = request.getParameter("change");
 			if (money == null || money.equals("") || cardNum == null || cardNum.equals("")) {
 				return;
 			}

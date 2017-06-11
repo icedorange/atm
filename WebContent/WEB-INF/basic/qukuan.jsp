@@ -7,7 +7,7 @@
 </head>
 <body>
 	<form
-		action="<%=request.getContextPath()%>/QukuanServlet?method=toQukuan" method="get">
+		action="<%=request.getContextPath()%>/QukuanServlet?method=toQukuan" method="post">
 		<table>
 			<%-- <tr>
 				<td>您的余额为：<%=session.getAttribute("balance")%>
