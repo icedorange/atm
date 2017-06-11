@@ -19,6 +19,6 @@
 <br/>
 <a href="transfer.jsp">转账</a>
 <br/>
-<a href="#">退出</a>
+<a href="login.jsp">退出</a>
 </body>
 </html>
