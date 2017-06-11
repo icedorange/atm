@@ -47,7 +47,9 @@ public class MyFilter implements Filter {
 				|| url.equals("/TransferServlet")
 				){
 			if(session.getAttribute("cardId")==null){
-				session.setAttribute("msg", "登陆超时，请重新登陆");
+				if(session.getAttribute("msg") == null){
+					session.setAttribute("msg", "登陆超时，请重新登陆");
+				}
 				res.sendRedirect("login.jsp");
 				return;
 			}
