@@ -40,6 +40,7 @@ public class CharacterEncode implements Filter {
 
 		HttpServletResponse res = (HttpServletResponse) response;
 		res.setCharacterEncoding("UTF-8");
+		//res.setContentType("text/html;charset=utf-8");
 
 		// pass the request along the filter chain
 		chain.doFilter(request, response);
