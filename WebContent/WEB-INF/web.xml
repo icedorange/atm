@@ -12,60 +12,6 @@
   <listener>
     <listener-class>com.atm.listener.MyListener</listener-class>
   </listener>
-  <filter>
-    <filter-name>MyFilter</filter-name>
-    <filter-class>com.atm.filter.MyFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>MyFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  <servlet>
-    <servlet-name>QueryServlet</servlet-name>
-    <servlet-class>com.atm.servlet.QueryServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>QueryServlet</servlet-name>
-    <url-pattern>/QueryServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>LoginServlet</servlet-name>
-    <servlet-class>com.atm.servlet.LoginServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LoginServlet</servlet-name>
-    <url-pattern>/LoginServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>CunkuanServlet</servlet-name>
-    <servlet-class>com.atm.servlet.CunkuanServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CunkuanServlet</servlet-name>
-    <url-pattern>/CunkuanServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>MainServlet</servlet-name>
-    <servlet-class>com.atm.servlet.MainServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MainServlet</servlet-name>
-    <url-pattern>/MainServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>QukuanServlet</servlet-name>
-    <servlet-class>com.atm.servlet.QukuanServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>QukuanServlet</servlet-name>
-    <url-pattern>/QukuanServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>TransferServlet</servlet-name>
-    <servlet-class>com.atm.servlet.TransferServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>TransferServlet</servlet-name>
-    <url-pattern>/TransferServlet</url-pattern>
-  </servlet-mapping>
+
+ 
 </web-app>
