@@ -19,17 +19,7 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td>
-					<%
-						Object msg = session.getAttribute("msg");
-						if (msg != null) {
-							out.print("<span style = \"color:red\">");
-							out.print(String.valueOf(msg));
-							out.print("</span>");
-							session.removeAttribute("msg");
-						}
-					%>
-				</td>
+				<td><span style="color: red">${SessionScope.msg }</span></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="提交" /></td>

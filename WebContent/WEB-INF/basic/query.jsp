@@ -8,10 +8,10 @@
 <body>
 
 
-	<h3><%=session.getAttribute("cardNum")%>你好
+	<h3>${cardNum }你好
 	</h3>
 	<h3>
-		您的余额为：<%=session.getAttribute("balance")%></h3>
-	<a href="<%=request.getContextPath()%>/MainServlet">返回主页</a>
+		您的余额为：${balance }</h3>
+	<a href="${pageContext.request.contextPath }/MainServlet">返回主页</a>
 </body>
 </html>

@@ -7,27 +7,20 @@
 </head>
 <body>
 
-	<form action="<%=request.getContextPath()%>/CunkuanServlet?method=toCunkuan" method="post">
+	<form
+		action="${pageContext.request.contextPath }/CunkuanServlet?method=toCunkuan"
+		method="post">
 		<table>
 			<tr>
 				<td>请输入存款金额：</td>
 				<td><input id="change" name="change" type="text"></td>
-				<td>
-					<%
-						Object msg = session.getAttribute("msg");
-						if (msg != null) {
-							out.print("<span style = \"color:red\">");
-							out.print(String.valueOf(msg));
-							out.print("</span>");
-						}
-					%>
-				</td>
+				<td><span style="color: red">${SessionScope.msg }</span></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="确认"></td>
 			</tr>
 		</table>
 	</form>
-	
+
 </body>
 </html>

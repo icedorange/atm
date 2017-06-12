@@ -7,24 +7,13 @@
 </head>
 <body>
 	<form
-		action="<%=request.getContextPath()%>/QukuanServlet?method=toQukuan" method="post">
+		action="${pageContext.request.contextPath }/QukuanServlet?method=toQukuan" method="post">
 		<table>
-			<%-- <tr>
-				<td>您的余额为：<%=session.getAttribute("balance")%>
-				</td>
-			</tr> --%>
 			<tr>
 				<td>请输入取款金额：</td>
 				<td><input id="change" name="change" type="text"></td>
 				<td>
-					<%
-						Object msg = session.getAttribute("msg");
-						if (msg != null) {
-							out.print("<span style = \"color:red\">");
-							out.print(String.valueOf(msg));
-							out.print("</span>");
-						}
-					%>
+					<span style="color: red">${SessionScope.msg }</span>
 				</td>
 			</tr>
 			<tr>

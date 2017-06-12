@@ -7,20 +7,13 @@
 </head>
 <body>
 
-	<form action="<%=request.getContextPath()%>/TransferServlet?method=toTransfer" method="post">
+	<form action="${pageContext.request.contextPath }/TransferServlet?method=toTransfer" method="post">
 		<table>
 			<tr>
 				<td>请输入对方账户</td>
 				<td><input id="aimNum" name="aimNum" type="text"></td>
 				<td>
-					<%
-						Object msg = session.getAttribute("msg");
-						if (msg != null) {
-							out.print("<span style = \"color:red\">");
-							out.print(String.valueOf(msg));
-							out.print("</span>");
-						}
-					%>
+					<span style="color: red">${SessionScope.msg }</span>
 				</td>
 			<tr>
 				<td>请输入存款金额：</td>

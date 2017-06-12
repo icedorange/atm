@@ -7,16 +7,16 @@
 </head>
 <body>
 	<h3>
-		欢迎<%=session.getAttribute("cardNum")%>使用ATM取款机
+		欢迎${cardNum}使用ATM取款机
 	</h3>
-	<a href="<%=request.getContextPath()%>/QueryServlet">查询余额</a>
+	<a href="${pageContext.request.contextPath}/QueryServlet">查询余额</a>
 	<br />
-	<a href="<%=request.getContextPath()%>/QukuanServlet?method=toStart">取款</a>
+	<a href="${pageContext.request.contextPath}/QukuanServlet?method=toStart">取款</a>
 	<br />
-	<a href="<%=request.getContextPath()%>/CunkuanServlet?method=toStart">存款</a>
+	<a href="${pageContext.request.contextPath}/CunkuanServlet?method=toStart">存款</a>
 	<br />
-	<a href="<%=request.getContextPath()%>/TransferServlet?method=toStart">转账</a>
+	<a href="${pageContext.request.contextPath}/TransferServlet?method=toStart">转账</a>
 	<br />
-	<a href="<%=request.getContextPath()%>/login.jsp">退出</a>
+	<a href="${pageContext.request.contextPath}/login.jsp">退出</a>
 </body>
 </html>
