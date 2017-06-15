@@ -4,17 +4,25 @@
 <html>
 <head>
 <title>取款</title>
+<script type="text/javascript">
+	function check() {
+		document.getElementById("submit").disabled = true;
+		return true;
+	}
+</script>
 </head>
 <body>
 	<form
-		action="${pageContext.request.contextPath }/QukuanServlet?method=toQukuan" method="post">
+		action="${pageContext.request.contextPath }/QukuanServlet?method=toQukuan"
+		onsubmit="return check();" method="post">
 		<table>
 			<tr>
 				<td>请输入取款金额：</td>
 				<td><input id="change" name="change" type="text"></td>
-				<td>
-					<span style="color: red">${SessionScope.msg }</span>
-				</td>
+				<td><span style="color: red">${SessionScope.msg }</span></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" name="token" value="${token }"></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="确认"></td>

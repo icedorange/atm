@@ -1,6 +1,7 @@
 package com.atm.servlet;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,6 +33,7 @@ public class TransferServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession(true);
 		// 跳转路径
 		String method = request.getParameter("method");
 		if (method == null || method.equals("")) {
@@ -39,6 +41,9 @@ public class TransferServlet extends HttpServlet {
 			return;
 		}
 		if (method.equals("toStart")) {
+			//创建令牌
+			String token = String.valueOf(UUID.randomUUID());
+			session.setAttribute("token", token);
 			request.getRequestDispatcher("/WEB-INF/basic/transfer.jsp").forward(request, response);
 			return;
 		}
@@ -49,11 +54,20 @@ public class TransferServlet extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/basic/transfer.jsp").forward(request, response);
 				return;
 			}
-			HttpSession session = request.getSession(true);
+			//获取表单令牌
+			String token = request.getParameter("token");
+			//获取session令牌
+			String token1 = String.valueOf(session.getAttribute("token"));
+			//校验令牌
+			if(!(token!=null && token.equals(token1))){
+				request.getRequestDispatcher("/WEB-INF/basic/main.jsp").forward(request, response);
+				return;
+			}
 			Object obj = session.getAttribute("cardId");
 			CardService cardService = new CardService();
 			int result = cardService.transferCheck(Integer.parseInt(String.valueOf(obj)), cardNum,
 					Integer.parseInt(money));
+			session.removeAttribute("token");
 			if (result == Constant.FAIL || result == Constant.RUNOUT || result == Constant.CARD_ERROR) {
 				session.setAttribute("msg", "余额不足、输入不正确或对方卡号不存在");
 				request.getRequestDispatcher("/WEB-INF/basic/transfer.jsp").forward(request, response);

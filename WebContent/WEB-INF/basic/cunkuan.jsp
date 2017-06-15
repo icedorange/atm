@@ -17,6 +17,9 @@
 				<td><span style="color: red">${SessionScope.msg }</span></td>
 			</tr>
 			<tr>
+				<td><input type="hidden" name="token" value="${token }"></td>
+			</tr>
+			<tr>
 				<td><input type="submit" value="确认"></td>
 			</tr>
 		</table>
