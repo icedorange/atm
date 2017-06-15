@@ -46,6 +46,7 @@ public class TransferServlet extends HttpServlet {
 			String cardNum = request.getParameter("aimNum");
 			String money = request.getParameter("change");
 			if (money == null || money.equals("") || cardNum == null || cardNum.equals("")) {
+				request.getRequestDispatcher("/WEB-INF/basic/transfer.jsp").forward(request, response);
 				return;
 			}
 			HttpSession session = request.getSession(true);

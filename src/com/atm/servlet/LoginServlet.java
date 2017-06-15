@@ -18,6 +18,7 @@ import com.atm.util.Constant;
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends BaseServlet {
+	
 	private static final long serialVersionUID = 1L;
 
 	CardService cardService = new CardService();

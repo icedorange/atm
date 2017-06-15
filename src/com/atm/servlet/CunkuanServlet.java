@@ -46,6 +46,7 @@ public class CunkuanServlet extends HttpServlet {
 
 			String money = request.getParameter("change");
 			if (money == null || money.equals("")) {
+				request.getRequestDispatcher("/WEB-INF/basic/cunkuan.jsp").forward(request, response);
 				return;
 			}
 
