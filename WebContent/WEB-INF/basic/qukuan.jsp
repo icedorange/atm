@@ -13,7 +13,7 @@
 </head>
 <body>
 	<form
-		action="${pageContext.request.contextPath }/QukuanServlet?method=toQukuan"
+		action="${pageContext.request.contextPath }/card/qukuan.htm"
 		onsubmit="return check();" method="post">
 		<table>
 			<tr>

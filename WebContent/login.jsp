@@ -12,7 +12,7 @@
 		$
 				.ajax({
 					type : "POST",
-					url : "${pageContext.request.contextPath }/LoginServlet?method=checkCardNum",
+					url : "${pageContext.request.contextPath }/card/checkCardNum.htm",
 					data : $("form").serialize(),
 					dataType : "json",
 					success : function(data) {
@@ -38,7 +38,7 @@
 </script>
 </head>
 <body>
-	<form action="LoginServlet?method=login" method="post">
+	<form action="card/login.htm" method="post">
 		<table>
 			<tr>
 				<td>卡号：</td>

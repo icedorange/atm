@@ -9,13 +9,13 @@
 	<h3>
 		欢迎${cardNum}使用ATM取款机
 	</h3>
-	<a href="${pageContext.request.contextPath}/QueryServlet">查询余额</a>
+	<a href="${pageContext.request.contextPath}/card/query.htm">查询余额</a>
 	<br />
-	<a href="${pageContext.request.contextPath}/QukuanServlet?method=toStart">取款</a>
+	<a href="${pageContext.request.contextPath}/card/qukuan.htm">取款</a>
 	<br />
-	<a href="${pageContext.request.contextPath}/CunkuanServlet?method=toStart">存款</a>
+	<a href="${pageContext.request.contextPath}/card/cunkuan.htm">存款</a>
 	<br />
-	<a href="${pageContext.request.contextPath}/TransferServlet?method=toStart">转账</a>
+	<a href="${pageContext.request.contextPath}/card/transfer.htm">转账</a>
 	<br />
 	<a href="${pageContext.request.contextPath}/login.jsp">退出</a>
 </body>

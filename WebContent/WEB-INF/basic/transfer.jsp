@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<form action="${pageContext.request.contextPath }/TransferServlet?method=toTransfer" method="post">
+	<form action="${pageContext.request.contextPath }/card/transfer.htm" method="post">
 		<table>
 			<tr>
 				<td>请输入对方账户</td>
