@@ -1,4 +1,5 @@
 # atm
-* v1.0版本使用jsp技术，对应分支forjsp-patch
-* v2.0版本使用servlet，对应分支forservlet-patch
-* v3.0版本使用框架spring mvc
+* 使用servlet
+* 使用EL表达式
+* 使用反射
+* 使用令牌
