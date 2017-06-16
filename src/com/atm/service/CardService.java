@@ -2,7 +2,10 @@ package com.atm.service;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.atm.javabean.Card;
 import com.atm.javabean.Record;
@@ -10,13 +13,17 @@ import com.atm.mapper.CardMapper;
 import com.atm.mapper.RecordMapper;
 import com.atm.util.Constant;
 import com.atm.util.MD5Util;
-import com.atm.util.SessionUtil;
 
+@Service
+@Transactional
 public class CardService {
 
-	// 创建数据库连接
-	SqlSession se = SessionUtil.getSession(true);
-
+	@Resource
+	CardMapper cardMapper;
+	
+	@Resource
+	RecordMapper recordMapper;
+	
 	/**
 	 * 根据cardNum，查询ID
 	 * 
@@ -29,8 +36,7 @@ public class CardService {
 			return Constant.FORMAT_ERROR;
 		}
 
-		CardMapper mapper = se.getMapper(CardMapper.class);
-		Card card = mapper.selectCardIdByCardNum(cardNum);
+		Card card = cardMapper.selectCardIdByCardNum(cardNum);
 		if (card == null) {
 			return Constant.CARD_ERROR;
 		}
@@ -46,8 +52,7 @@ public class CardService {
 	public Card selectCardByCardId(int cardId) {
 		// cardId是用selectCardIdByCardNum(String cardNum)方法查询数据库得到
 		// 所以默认cardId不会出错
-		CardMapper mapper = se.getMapper(CardMapper.class);
-		Card card = mapper.selectCardByCardId(cardId);
+		Card card = cardMapper.selectCardByCardId(cardId);
 		return card;
 	}
 
@@ -65,10 +70,9 @@ public class CardService {
 			return Constant.FORMAT_ERROR;
 		}
 
-		CardMapper mapper = se.getMapper(CardMapper.class);
 
 		// 判断卡号是否存在
-		Card card = mapper.selectCardIdByCardNum(cardNum);
+		Card card = cardMapper.selectCardIdByCardNum(cardNum);
 		if (card == null) {
 			return Constant.CARD_ERROR;
 		}
@@ -132,7 +136,6 @@ public class CardService {
 		}
 
 		int change = 0;
-		CardMapper mapper = se.getMapper(CardMapper.class);
 		// 使用乐观锁
 		while (true) {
 			Card card = selectCardByCardId(cardId);
@@ -144,14 +147,13 @@ public class CardService {
 
 			// version：乐观锁
 			int version = card.getVersion();
-			int temp = mapper.getMoneyFromCard(cardId, version, money);
+			int temp = cardMapper.getMoneyFromCard(cardId, version, money);
 			if (temp > 0) {
 				break;
 			}
 		}
 
 		// 插入流水
-		RecordMapper recordMapper = se.getMapper(RecordMapper.class);
 		recordMapper.insertTrans(cardId, cardId, 1, money);
 
 		return Constant.SUCCESS;
@@ -177,18 +179,16 @@ public class CardService {
 			return Constant.MAXINPUT;
 		}
 
-		CardMapper mapper = se.getMapper(CardMapper.class);
 		while (true) {
 			Card card = selectCardByCardId(cardId);
 			int version = card.getVersion();
-			int temp = mapper.getMoneyFromCard(cardId, version, -money);
+			int temp = cardMapper.getMoneyFromCard(cardId, version, -money);
 			if (temp > 0) {
 				break;
 			}
 		}
 
-		RecordMapper reMapper = se.getMapper(RecordMapper.class);
-		reMapper.insertTrans(cardId, cardId, 2, money);
+		recordMapper.insertTrans(cardId, cardId, 2, money);
 		return Constant.SUCCESS;
 	}
 
@@ -238,7 +238,6 @@ public class CardService {
 	 */
 	private int transfer(int cardId, int aimId, int money) {
 		int change = 0;
-		CardMapper mapper = se.getMapper(CardMapper.class);
 
 		while (true) {
 			Card card = selectCardByCardId(cardId);
@@ -247,7 +246,7 @@ public class CardService {
 				return Constant.RUNOUT;
 			}
 			int version = card.getVersion();
-			int temp = mapper.getMoneyFromCard(cardId, version, money);
+			int temp = cardMapper.getMoneyFromCard(cardId, version, money);
 			if (temp > 0) {
 				break;
 			}
@@ -256,22 +255,34 @@ public class CardService {
 		while (true) {
 			Card card = selectCardByCardId(aimId);
 			int version = card.getVersion();
-			int temp = mapper.getMoneyFromCard(aimId, version, -money);
+			int temp = cardMapper.getMoneyFromCard(aimId, version, -money);
 			if (temp > 0) {
 				break;
 			}
 		}
 
-		RecordMapper reMapper = se.getMapper(RecordMapper.class);
-		reMapper.insertTrans(cardId, aimId, 3, money);
+		recordMapper.insertTrans(cardId, aimId, 3, money);
 		return Constant.SUCCESS;
 	}
 
+	/**
+	 * 获取流水信息
+	 * @param operId
+	 * @param aimId
+	 * @param operType
+	 * @param day
+	 * @return
+	 */
 	public List<Record> getTranfer(int operId, int aimId, int operType, int day) {
-		RecordMapper mapper = se.getMapper(RecordMapper.class);
-		return mapper.getTranfer(operId, aimId, operType, 0);
+		return recordMapper.getTranfer(operId, aimId, operType, 0);
 	}
 
+	/**
+	 * 当天已取款数目
+	 * @param cardId
+	 * @param money
+	 * @return
+	 */
 	public int maxGetMoney(int cardId, int money) {
 		// 取款流水
 		List<Record> list = getTranfer(cardId, 0, 1, 1);
@@ -288,6 +299,12 @@ public class CardService {
 		return sum;
 	}
 
+	/**
+	 * 当天已存款数目
+	 * @param cardId
+	 * @param money
+	 * @return
+	 */
 	public int maxInputMoney(int cardId, int money) {
 		// 存款流水
 		List<Record> list = getTranfer(cardId, 0, 2, 1);
