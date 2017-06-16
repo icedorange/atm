@@ -14,7 +14,7 @@
 					type : "POST",
 					url : "${pageContext.request.contextPath }/card/checkCardNum.htm",
 					data : $("form").serialize(),
-					dataType : "json",
+					dataType : "JSONObject",
 					success : function(data) {
 						if (data.code != 1) {
 							$("#msg").html(data.msg);
@@ -38,7 +38,7 @@
 </script>
 </head>
 <body>
-	<form action="card/login.htm" method="post">
+	<form action="${pageContext.request.contextPath }/card/login.htm" method="post">
 		<table>
 			<tr>
 				<td>卡号：</td>

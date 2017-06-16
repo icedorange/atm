@@ -39,7 +39,6 @@ public class LoginController {
 	public  JSONObject checkCardNum(Model model, Card card, HttpServletResponse response,HttpSession session) throws IOException {
 		logger.debug("用户请求用户名，密码登陆");
 		logger.info("info");
-		logger.warn("warn");
 		logger.error("error");
 		int code = cardService.selectCardIdByCardNum(card.getcardNum());
 		logger.debug("用户请求登陆服务器返回结果", code);
