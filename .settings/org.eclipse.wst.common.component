@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <property name="java-output-path" value="/atmweb/target/classes"/>
+        <property name="java-output-path" value="/atm/target/classes"/>
         <property name="context-root" value="atm"/>
     </wb-module>
 </project-modules>

@@ -43,8 +43,6 @@ public class LoginController {
 		int code = cardService.selectCardIdByCardNum(cardNum);
 		JSONObject jo = new JSONObject();
 		if (code == Constant.FORMAT_ERROR || code == Constant.CARD_ERROR) {
-			session.setAttribute("cardId", code);
-			session.setAttribute("cardNum", cardNum);
 			jo.put("code", code);
 			jo.put("msg", "卡号不正确");
 			return jo;
@@ -58,6 +56,8 @@ public class LoginController {
 		int code = cardService.check(card.getcardNum(), card.getPassword());
 		logger.debug("用户请求登陆服务器返回结果", code);
 		if (code == 1) {
+			session.setAttribute("cardId", code);
+			session.setAttribute("cardNum", card.getcardNum());
 			return "main";
 		}
 		JSONObject jo = new JSONObject();
