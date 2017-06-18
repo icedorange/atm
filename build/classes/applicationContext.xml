@@ -13,10 +13,12 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
+	<!-- 自动扫描 -->
 	<context:component-scan base-package="com.atm" >
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
+	<!-- 注解处理工具，激活spring容器里注册过的bean -->
 	<!-- 	<context:annotation-config /> -->
 
 	<!-- 引入配置文件 -->
@@ -32,8 +34,8 @@
       	<property name="password" value="${jdbc_password}" />
         
       	<!-- 配置初始化大小、最小、最大 -->
-      	<property name="initialSize" value="3" />
-      	<property name="minIdle" value="1" /> 
+      	<property name="initialSize" value="5" />
+      	<property name="minIdle" value="3" /> 
       	<property name="maxActive" value="20" />
    
       	<!-- 配置获取连接等待超时的时间 -->
@@ -60,6 +62,7 @@
         <property name="dataSource" ref="dataSource" />
     </bean>   
     
+    <!-- 配置事物的方式，注解 -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.annotation.MapperScan;
 
-import com.atm.javabean.Record;
+import com.atm.bean.Record;
 
 @MapperScan
 public interface RecordMapper {

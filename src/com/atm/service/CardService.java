@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.atm.javabean.Card;
-import com.atm.javabean.Record;
+import com.atm.bean.Card;
+import com.atm.bean.Record;
 import com.atm.mapper.CardMapper;
 import com.atm.mapper.RecordMapper;
 import com.atm.util.Constant;
@@ -32,7 +32,7 @@ public class CardService {
 	 */
 	public int selectCardIdByCardNum(String cardNum) {
 		// 判断输入长度是否正确
-		if (cardNum.length() != 16) {
+		if (cardNum.equals("")||cardNum.length() != 16) {
 			return Constant.FORMAT_ERROR;
 		}
 
@@ -274,7 +274,7 @@ public class CardService {
 	 * @return
 	 */
 	public List<Record> getTranfer(int operId, int aimId, int operType, int day) {
-		return recordMapper.getTranfer(operId, aimId, operType, 0);
+		return recordMapper.getTranfer(operId, aimId, operType, day);
 	}
 
 	/**

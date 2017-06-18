@@ -8,7 +8,7 @@
 <body>
 
 	<form
-		action="${pageContext.request.contextPath }/card/cunkuanServlet.htm"
+		action="${pageContext.request.contextPath }/card/cunkuan.htm"
 		method="post">
 		<table>
 			<tr>

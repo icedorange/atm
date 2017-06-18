@@ -6,21 +6,22 @@
 <head>
 <title>login</title>
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+	
 </script>
 <script>
 	function checkCardNum() {
-		$
-				.ajax({
-					type : "POST",
-					url : "${pageContext.request.contextPath }/card/checkCardNum.htm",
-					data : $("form").serialize(),
-					dataType : "JSONObject",
-					success : function(data) {
-						if (data.code != 1) {
-							$("#msg").html(data.msg);
-						}
-					}
-				});
+		$.ajax({
+			type : "POST",
+			url : "${pageContext.request.contextPath }/card/checkCardNum.htm",
+			data : //$("form").serialize(),	
+			{cardNum:$("#cardNum").val()},
+			dataType : "json",
+			success : function(data) {
+				if (data.code != 1) {
+					$("#msg").html(data.msg);
+				}
+			}
+		});
 	}
 
 	//GET方式
@@ -38,12 +39,13 @@
 </script>
 </head>
 <body>
-	<form action="${pageContext.request.contextPath }/card/login.htm" method="post">
+	<form action="${pageContext.request.contextPath }/card/check.htm"
+		method="post">
 		<table>
 			<tr>
 				<td>卡号：</td>
-				<td><input type="text" name="cardNum" id="cardNum" 
-				onblur="checkCardNum();" onfocus="$('#msg').html('');" /></td>
+				<td><input type="text" name="cardNum" id="cardNum"
+					onblur="checkCardNum();" onfocus="$('#msg').html('');" /></td>
 			</tr>
 			<tr>
 				<td>密码：</td>
@@ -51,7 +53,7 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><span id="msg" style="color: red"></span></td>
+				<td><span id="msg" name="msg" style="color: red"></span></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="提交" /></td>

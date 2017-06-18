@@ -11,12 +11,12 @@
 	</h3>
 	<a href="${pageContext.request.contextPath}/card/query.htm">查询余额</a>
 	<br />
-	<a href="${pageContext.request.contextPath}/card/qukuan.htm">取款</a>
+	<a href="${pageContext.request.contextPath}/card/qukuanStart.htm">取款</a>
 	<br />
-	<a href="${pageContext.request.contextPath}/card/cunkuan.htm">存款</a>
+	<a href="${pageContext.request.contextPath}/card/cunkuanStart.htm">存款</a>
 	<br />
-	<a href="${pageContext.request.contextPath}/card/transfer.htm">转账</a>
+	<a href="${pageContext.request.contextPath}/card/transferStart.htm">转账</a>
 	<br />
-	<a href="${pageContext.request.contextPath}/login.jsp">退出</a>
+	<a href="${pageContext.request.contextPath}/card/login.htm">退出</a>
 </body>
 </html>

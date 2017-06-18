@@ -1,8 +1,10 @@
 package com.atm.controller;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.atm.javabean.Card;
+import com.atm.bean.Card;
 import com.atm.service.CardService;
 import com.atm.util.Constant;
 
@@ -35,18 +37,16 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/checkCardNum.htm", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
-	public  JSONObject checkCardNum(Model model, Card card, HttpServletResponse response,HttpSession session) throws IOException {
-		logger.debug("用户请求用户名，密码登陆");
-		logger.info("info");
-		logger.error("error");
-		int code = cardService.selectCardIdByCardNum(card.getcardNum());
-		logger.debug("用户请求登陆服务器返回结果", code);
+	
+	public @ResponseBody JSONObject checkCardNum(Model model, String cardNum, HttpServletResponse response, HttpSession session)
+			throws IOException {
+		int code = cardService.selectCardIdByCardNum(cardNum);
 		JSONObject jo = new JSONObject();
-		if (code != Constant.FORMAT_ERROR || code!=Constant.CARD_ERROR) {
+		if (code == Constant.FORMAT_ERROR || code == Constant.CARD_ERROR) {
 			session.setAttribute("cardId", code);
+			session.setAttribute("cardNum", cardNum);
 			jo.put("code", code);
-			jo.put("msg", "asdfsfd");
+			jo.put("msg", "卡号不正确");
 			return jo;
 			// return "login";
 		}
@@ -55,14 +55,20 @@ public class LoginController {
 
 	@RequestMapping(value = "/check.htm", method = { RequestMethod.GET, RequestMethod.POST })
 	public String check(Model model, Card card, HttpSession session) {
-		logger.debug("用户请求用户名，密码登陆");
 		int code = cardService.check(card.getcardNum(), card.getPassword());
 		logger.debug("用户请求登陆服务器返回结果", code);
 		if (code == 1) {
-			
 			return "main";
 		}
+		JSONObject jo = new JSONObject();
+		jo.put("code", code);
+		jo.put("msg", "卡号不正确");
 		return "login";
+	}
+
+	@RequestMapping(value = "/main.htm")
+	public String main() {
+		return "main";
 	}
 
 	/**
@@ -89,19 +95,37 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/qukuanStart.htm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String qukuanStart(Model model, HttpSession session) {
+	public String qukuanStart(HttpSession session) {
+		String token = String.valueOf(UUID.randomUUID());
+		session.setAttribute("token", token);
 		return "qukuan";
 	}
 
 	@RequestMapping(value = "/qukuan.htm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String qukuan(Model model, String money, HttpSession session) {
-		Integer money1 = Integer.parseInt(money);
-		int cardId = Integer.parseInt(String.valueOf(session.getAttribute("cardId")));
-		int result = cardService.getMoneyFromCard(cardId, money1);
-		if (result == Constant.SUCCESS) {
+	public String qukuan(Model model, String change, HttpSession session, HttpServletResponse response,
+			HttpServletRequest request) {
+
+		// 获取表单令牌
+		String token = request.getParameter("token");
+		if (change == null) {
+			session.setAttribute("msg", "输入不正确");
+			return "qukuan";
+		}
+		// 获取session令牌
+		String token1 = String.valueOf(session.getAttribute("token"));
+		// 校验令牌
+		if (!(token != null && token.equals(token1))) {
 			return "main";
 		}
-		return "query";
+		Object obj = session.getAttribute("cardId");
+		int result = cardService.getMoneyFromCard(Integer.parseInt(String.valueOf(obj)), Integer.parseInt(change));
+		// 移除令牌
+		session.removeAttribute("token");
+		if (result == Constant.FAIL || result == Constant.RUNOUT) {
+			session.setAttribute("msg", "余额不足或输入不正确");
+			return "qukuan";
+		}
+		return "main";
 	}
 
 	/**
@@ -110,35 +134,67 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/cunkuanStart.htm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String cunkaunStart() {
+	public String cunkaunStart(HttpSession session) {
+		String token = String.valueOf(UUID.randomUUID());
+		session.setAttribute("token", token);
 		return "cunkuan";
 	}
 
 	@RequestMapping(value = "/cunkuan.htm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String cunkuan(String money, HttpSession session) {
-		Integer money1 = Integer.parseInt(money);
-		int cardId = Integer.parseInt(String.valueOf(session.getAttribute("cardId")));
-		int result = cardService.putMoneyInCard(cardId, money1);
-		if (result == Constant.SUCCESS) {
+	public String cunkuan(String change, HttpSession session,HttpServletResponse response,
+			HttpServletRequest request) {
+		
+		if (change == null || change.equals("")) {
+			return "cunkuan";
+		}
+		//获取表单令牌
+		String token = request.getParameter("token");
+		//获取session令牌
+		String token1 = String.valueOf(session.getAttribute("token"));
+		//校验令牌
+		if(!(token!=null && token.equals(token1))){
 			return "main";
 		}
-		return "cunkuan";
+		Object obj = session.getAttribute("cardId");
+		int result = cardService.putMoneyInCard(Integer.parseInt(String.valueOf(obj)), Integer.parseInt(change));
+		session.removeAttribute("token");
+		if (result == Constant.FAIL) {
+			session.setAttribute("msg", "输入不正确");
+			return "cunkuan";
+		}
+		return "main";
 	}
 
 	@RequestMapping(value = "/transferStart.htm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String transferStart() {
+	public String transferStart(HttpSession session) {
+		String token = String.valueOf(UUID.randomUUID());
+		session.setAttribute("token", token);
 		return "transfer";
 	}
 
 	@RequestMapping(value = "/transfer.htm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String transfer(String cardNum, String money,HttpSession session) throws Exception {
-		int money1 = Integer.parseInt(money);
-		int cardId = Integer.parseInt(String.valueOf(session.getAttribute("cardId")));
-		int result = cardService.transferCheck(cardId, cardNum, money1);
-		if (result == Constant.SUCCESS) {
+	public String transfer(String aimNum, String change, HttpSession session,HttpServletResponse response,
+			HttpServletRequest request) throws Exception {
+		if (change == null || change.equals("") || aimNum == null || aimNum.equals("")) {
+			return "transfer";
+		}
+		//获取表单令牌
+		String token = request.getParameter("token");
+		//获取session令牌
+		String token1 = String.valueOf(session.getAttribute("token"));
+		//校验令牌
+		if(!(token!=null && token.equals(token1))){
 			return "main";
 		}
-		return "transfer";
+		Object obj = session.getAttribute("cardId");
+		int result = cardService.transferCheck(Integer.parseInt(String.valueOf(obj)), aimNum,
+				Integer.parseInt(change));
+		session.removeAttribute("token");
+		if (result == Constant.FAIL || result == Constant.RUNOUT || result == Constant.CARD_ERROR) {
+			session.setAttribute("msg", "余额不足、输入不正确或对方卡号不存在");
+			return "transfer";
+		}
+		return "main";
 	}
 
 }

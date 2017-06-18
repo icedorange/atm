@@ -5,8 +5,8 @@
 <configuration>
 
 	<typeAliases>
-		<typeAlias alias="Card" type="com.atm.javabean.Card" />
-		<typeAlias alias="Record" type="com.atm.javabean.Record" />
+		<typeAlias alias="Card" type="com.atm.bean.Card" />
+		<typeAlias alias="Record" type="com.atm.bean.Record" />
 	</typeAliases>
 
 </configuration>

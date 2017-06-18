@@ -1,4 +1,4 @@
-package com.atm.javabean;
+package com.atm.bean;
 
 public class Card {
 	
