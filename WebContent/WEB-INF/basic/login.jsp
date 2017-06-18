@@ -53,7 +53,7 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><span id="msg" name="msg" style="color: red"></span></td>
+				<td><span id="msg"  style="color: red"></span></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="提交" /></td>
